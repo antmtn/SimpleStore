@@ -10,13 +10,17 @@ Database: MySQL w/ JDBC
 
 ## How to run (development)
 1. clone the repository
+
 Frontend
+
 2. cd into frontend
 3. npm install
 4. npm run dev
 5. There should be a link in the console output that brings you to the homepage
 6. Press Ctrl+C to exit 
+
 Backend (using intellij)
+
 2. File --> New --> Project From Existing Sources
 3. Import Project from external model --> Maven
 4. Create
