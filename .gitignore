@@ -1,0 +1,19 @@
+# IDE
+**/.idea/
+**/*.iml
+**/.vscode/
+
+# Java
+**/target/
+
+# Node/React
+**/node_modules/
+**/dist/
+**/build/
+**/.vite/
+
+# Env/OS
+**/.env
+**/.env.*
+.DS_Store
+Thumbs.db
