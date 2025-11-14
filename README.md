@@ -3,7 +3,9 @@ A simple e-commerce web application.
 
 ## Tech Stack
 Frontend: Vite/React
+
 Backend: Springboot Server
+
 Database: MySQL w/ JDBC
 
 ## How to run (development)
