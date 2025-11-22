@@ -24,6 +24,8 @@ Backend (using intellij)
 2. File --> New --> Project From Existing Sources
 3. Import Project from external model --> Maven
 4. Create
-5. Run the SpringBootServer.java file to start the server
-6. go to 127.0.0.1:8080/, you should see Hello World!
-7. stop the run to exit
+5. Create database in MySQL: CREATE DATABASE simplestore_db;
+6. Change USER and PASSWORD in MySQLConnection 
+7. Run the SpringBootServer.java file to start the server 
+8. go to 127.0.0.1:8080/, you should see Hello World!
+9. stop the run to exit
