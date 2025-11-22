@@ -1,8 +1,10 @@
 import {useEffect, useState} from 'react'
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
+import NavBar from "../components/NavBar.jsx";
+import Button from '@mui/material/Button';
 
-function Products() {
+function Products({addToCart}) {
 
     const [products, setProducts] = useState([]);
 
@@ -24,7 +26,8 @@ function Products() {
 
     return (
         <>
-            <h1>Products</h1>
+            <NavBar />
+            <h1 style={{ marginLeft: '16px' }}>Products</h1>
             <Box elevation={6} variant="outlined" square={true} sx={{ display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
                 gap: 2,
@@ -57,6 +60,14 @@ function Products() {
                             }}>
                             </img></div>
                         <p><strong>{product.name}</strong></p><p>${product.price}</p>
+                        <Button
+                            variant="contained"
+                            size="small"
+                            onClick={() => addToCart(product)}
+                        >
+                            Add to Cart
+
+                        </Button>
                     </Paper>
                 ))}
 
