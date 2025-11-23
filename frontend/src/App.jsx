@@ -10,7 +10,10 @@ function App() {
   function addToCart(product, qty){
     setCart(prev => {
       for(let i = 0; i< prev.length; i++){
-        alert("Product is already in cart");
+        if (prev[i].product.product_id == product.product_id){
+          alert("Product is already in cart");
+          return prev;
+        }
       }
       return [...prev, { product, qty }];
     });
