@@ -7,8 +7,13 @@ import Cart from "./pages/Cart.jsx";
 function App() {
   const [cart, setCart] = useState([]);
 
-  function addToCart(product){
-    setCart(prev => [...prev, product]);
+  function addToCart(product, qty){
+    setCart(prev => {
+      for(let i = 0; i< prev.length; i++){
+        alert("Product is already in cart");
+      }
+      return [...prev, { product, qty }];
+    });
   }
 
   return (

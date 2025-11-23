@@ -24,6 +24,9 @@ function Products({addToCart}) {
         }
     }
 
+    const [qtySelections, setQtySelections] = useState({});
+
+
     return (
         <>
             <NavBar />
@@ -32,7 +35,10 @@ function Products({addToCart}) {
                 gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
                 gap: 2,
                 padding: 2}}>
-                {products.map((product) => (
+                {products.map((product) => {
+                    const currentQty = qtySelections[product.product_id] || 1; 
+
+                    return (
                     <Paper key={product.product_id} sx={{
                         padding: 2,
                         margin: 1,
@@ -60,16 +66,28 @@ function Products({addToCart}) {
                             }}>
                             </img></div>
                         <p><strong>{product.name}</strong></p><p>${product.price}</p>
+
+                        <select 
+                            value={currentQty}
+                            onChange={e =>
+                                setQtySelections(s => ({
+                                    ...s,
+                                    [product.product_id]: Number(e.target.value)
+                                }))
+                            }>
+                            {[1,2,3,4,5,6,7,8,9,10].map(n => (
+                            <option key={n} value={n}>{n}</option>
+                            ))}
+                        </select>
                         <Button
                             variant="contained"
                             size="small"
-                            onClick={() => addToCart(product)}
+                            onClick={() => addToCart(product, currentQty)}
                         >
                             Add to Cart
-
                         </Button>
-                    </Paper>
-                ))}
+                    </Paper>)
+                })}
 
             </Box>
         </>

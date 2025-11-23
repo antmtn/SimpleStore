@@ -31,9 +31,10 @@ function Cart({cart}) {
             ))
          */}
          {
-          cart.map((item, i) => (
-            <Box key={i} sx={{mb: 1}}>
-              {item.name} - ${item.price}
+          cart.map((item) => (
+            <Box key={item.product_id} sx={{mb: 1}}>
+              {item.product.name} — Qty: {item.qty} — ${item.product.price} each — Total: $
+              {(item.product.price * item.qty).toFixed(2)}
             </Box>
           ))
          }
