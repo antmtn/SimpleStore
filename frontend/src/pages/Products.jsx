@@ -5,13 +5,15 @@ import NavBar from "../components/NavBar.jsx";
 import Button from '@mui/material/Button';
 
 function Products({addToCart}) {
-
+    // products fetched from backend API
     const [products, setProducts] = useState([]);
 
+    // Loads products in the beginning
     useEffect(() => {
         fetchProducts()
     }, []);
 
+    // Fetch to API 
     const fetchProducts = async () => {
         try {
             const response = await fetch("http://localhost:8080/api/products");
@@ -24,8 +26,8 @@ function Products({addToCart}) {
         }
     }
 
+    // tracks selected quantity per product
     const [qtySelections, setQtySelections] = useState({});
-
 
     return (
         <>
@@ -36,6 +38,7 @@ function Products({addToCart}) {
                 gap: 2,
                 padding: 2}}>
                 {products.map((product) => {
+                    // Current Qty of the product, default 1
                     const currentQty = qtySelections[product.product_id] || 1; 
 
                     return (
@@ -67,6 +70,7 @@ function Products({addToCart}) {
                             </img></div>
                         <p><strong>{product.name}</strong></p><p>${product.price}</p>
 
+                        {/* Allow user to pick 1-10 for each product */}
                         <select 
                             value={currentQty}
                             onChange={e =>
@@ -79,6 +83,8 @@ function Products({addToCart}) {
                             <option key={n} value={n}>{n}</option>
                             ))}
                         </select>
+
+                        {/* Add the product to cart with selected quantity */}
                         <Button
                             variant="contained"
                             size="small"

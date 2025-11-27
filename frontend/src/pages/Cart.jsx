@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
+// Receives array of products and their quantity
 function Cart({cart}) {
   // Placeholder for future cart items array
 
@@ -25,11 +26,8 @@ function Cart({cart}) {
             Browse Products
           </Button>
         )}
-        {/* When you have items, render them here. Example structure:
-            items.map(p => (
-              <Box key={p.id}>{p.name} - ${p.price}</Box>
-            ))
-         */}
+
+        {/* Displaying each item in the cart as a Box element */}
          {
           cart.map((item) => (
             <Box key={item.product_id} sx={{mb: 1}}>

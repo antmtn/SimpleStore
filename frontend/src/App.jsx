@@ -5,8 +5,11 @@ import Home from "./pages/Home.jsx";
 import Cart from "./pages/Cart.jsx";
 
 function App() {
+  // Cart holds items {product, qty}
   const [cart, setCart] = useState([]);
 
+  // Add product to cart with selected quantity
+  //If it exists alert user
   function addToCart(product, qty){
     setCart(prev => {
       for(let i = 0; i< prev.length; i++){
@@ -22,8 +25,13 @@ function App() {
   return (
     <>
     <Routes>
+      {/* Homepage Route */}
       <Route path='/' element={<Home/>} />
+
+      {/* Products Route uses addToCart function to handle clicks */}
       <Route path='/products' element={<Products addToCart={addToCart}/>} />
+
+      {/* Cart Route takes Cart State and displays items + total */}
       <Route path='/cart' element={<Cart cart = {cart}/>} />
     </Routes>
     </>
