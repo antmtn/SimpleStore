@@ -3,6 +3,8 @@ import { Route, Routes } from 'react-router-dom';
 import Products from "./pages/Products.jsx";
 import Home from "./pages/Home.jsx";
 import Cart from "./pages/Cart.jsx";
+import Signup from "./pages/Signup.jsx";
+import Login from "./pages/Login.jsx";
 
 function App() {
   // Cart holds items {product, qty}
@@ -27,6 +29,12 @@ function App() {
     <Routes>
       {/* Homepage Route */}
       <Route path='/' element={<Home/>} />
+
+      {/* Signup Route*/}
+      <Route path='/signup' element={<Signup/>}/>
+
+      {/* Login Route*/}
+      <Route path='/login' element={<Login/>}/>
 
       {/* Products Route uses addToCart function to handle clicks */}
       <Route path='/products' element={<Products addToCart={addToCart}/>} />

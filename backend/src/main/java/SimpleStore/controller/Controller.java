@@ -1,5 +1,6 @@
 package SimpleStore.controller;
 
+import SimpleStore.relations.Users;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import SimpleStore.relations.Products;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class Controller {
 
     private final Products products = new Products();
+    private final Users users = new Users();
 
     @GetMapping("/")
     public String helloWorld(){
@@ -20,6 +22,7 @@ public class Controller {
     @GetMapping("/init")
     public String init() throws Exception {
         products.createTable();
+        users.createTable();
         products.insert("chocolate", 3.99, 5, "https://cdn11.bigcommerce.com/s-qbjojecpaq/images/stencil/1280x1280/products/442/1968/Untitled_design_-_2023-06-12T155310.493__67118.1686599665.png?c=1");
         products.insert("shirt", 4.99, 2, "https://m.media-amazon.com/images/I/81-pkxp9h-L._AC_UY1000_.jpg");
         products.insert("sweater", 13.99, 5, "https://cdni.llbean.net/is/image/wim/505183_1155_41?hei=1095&wid=950&resMode=sharp2&defaultImage=llbprod/505183_0_44");
