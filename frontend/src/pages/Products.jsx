@@ -88,8 +88,8 @@ function Products({addToCart, addToCartDB}) {
                         <Button
                             variant="contained"
                             size="small"
-                            onClick={() => addToCart(product, currentQty)}
-                            // onClick={() => addToCartDB(product.product_id, currentQty)}
+                            // onClick={() => addToCart(product, currentQty)}
+                            onClick={() => addToCartDB(product.product_id, currentQty)}
                         >
                             Add to Cart
                         </Button>

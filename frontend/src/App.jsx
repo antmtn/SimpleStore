@@ -48,10 +48,10 @@ function App() {
       <Route path='/' element={<Home/>} />
 
       {/* Signup Route*/}
-      <Route path='/signup' element={<Signup/>}/>
+      <Route path='/signup' element={<Signup setUserId={setUserId}/>}/>
 
       {/* Login Route*/}
-      <Route path='/login' element={<Login/>}/>
+      <Route path='/login' element={<Login setUserId={setUserId}/>}/>
 
       {/* Products Route uses addToCart function to handle clicks */}
       <Route path='/products' element={<Products addToCart={addToCart} addToCartDB={addToCartDB}/>} />

@@ -8,11 +8,11 @@ import {useEffect, useState} from "react";
 function Cart({userId, cart}) {
   // Placeholder for future cart items array
 
-  const isEmpty = cart.length === 0;
+  // const isEmpty = cart.length === 0;
 
   const [savedCart, setSavedCart] = useState([]);
 
-  // const isEmpty = savedCart.length === 0;
+  const isEmpty = savedCart.length === 0;
 
     useEffect(() => {
         fetchSavedItems()
@@ -51,22 +51,23 @@ function Cart({userId, cart}) {
         )}
 
         {/* Displaying each item in the cart as a Box element */}
-        {/*  {!isEmpty &&*/}
-        {/*      (savedCart.map((item) => (*/}
-        {/*          <Box key={item.product_id} sx={{mb: 1}}>*/}
-        {/*              {item.name} — Qty: {item.qty} — ${item.price} each — Total: $*/}
-        {/*              {(item.price * item.qty).toFixed(2)}*/}
-        {/*          </Box>*/}
-        {/*      )))*/}
-        {/*  }*/}
-         {
-          cart.map((item) => (
-            <Box key={item.product_id} sx={{mb: 1}}>
-              {item.product.name} — Qty: {item.qty} — ${item.product.price} each — Total: $
-              {(item.product.price * item.qty).toFixed(2)}
-            </Box>
-          ))
-         }
+          {!isEmpty &&
+              (savedCart.map((item) => (
+                  <Box key={item.product_id} sx={{mb: 1}}>
+                      {item.name} — Qty: {item.qty} — ${item.price} each — Total: $
+                      {(item.price * item.qty).toFixed(2)}
+                  </Box>
+              )))
+          }
+
+         {/*{*/}
+         {/* cart.map((item) => (*/}
+         {/*   <Box key={item.product_id} sx={{mb: 1}}>*/}
+         {/*     {item.product.name} — Qty: {item.qty} — ${item.product.price} each — Total: $*/}
+         {/*     {(item.product.price * item.qty).toFixed(2)}*/}
+         {/*   </Box>*/}
+         {/* ))*/}
+         {/*}*/}
          {!isEmpty && (
              <Button variant="contained">Order Products</Button>
          )}

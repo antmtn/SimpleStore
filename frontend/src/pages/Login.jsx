@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 
-function Login() {
+function Login({setUserId}) {
 
     const navigate = useNavigate();
 
@@ -23,6 +23,7 @@ function Login() {
             const data = await response.json();
             if (data > 0) {
                 localStorage.setItem("userId", data);
+                setUserId(data)
                 navigate("/");
             }
         }

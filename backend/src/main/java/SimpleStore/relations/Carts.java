@@ -20,21 +20,25 @@ public class Carts {
     }
 
     public int findCartId(int user_id) throws SQLException {
-        String findIdSQL = "SELECT * FROM Carts WHERE user_id = ?";
+        String findIdSQL = "SELECT cart_id FROM Carts WHERE user_id = ?";
         try (Connection conn = MySQLConnection.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(findIdSQL);
             stmt.setInt(1, user_id);
             ResultSet rs = stmt.executeQuery();
-            int cart_id = rs.next() ? rs.getInt("cart_id") : -1;
-            if (cart_id == -1) {
+            if (rs.next()) {
+                return rs.getInt("cart_id");
+            }
+            else {
                 String addNewCartSQL = "INSERT INTO Carts (user_id) VALUES (?)";
-                PreparedStatement addNewCartPreparedStatement = conn.prepareStatement(addNewCartSQL);
+                PreparedStatement addNewCartPreparedStatement = conn.prepareStatement(addNewCartSQL, Statement.RETURN_GENERATED_KEYS);
                 addNewCartPreparedStatement.setInt(1, user_id);
                 addNewCartPreparedStatement.executeUpdate();
                 ResultSet rsNew = addNewCartPreparedStatement.getGeneratedKeys();
-                cart_id = rsNew.getInt("cart_id");
+                if (rsNew.next()) {
+                    return rsNew.getInt(1);
+                }
             }
-            return cart_id;
+            return 0;
         }
     }
 }
