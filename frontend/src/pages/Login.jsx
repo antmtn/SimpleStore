@@ -22,7 +22,8 @@ function Login() {
             });
             const data = await response.json();
             if (data > 0) {
-                navigate("/")
+                localStorage.setItem("userId", data);
+                navigate("/");
             }
         }
         catch(error) {

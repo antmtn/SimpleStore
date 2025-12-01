@@ -9,6 +9,10 @@ import Login from "./pages/Login.jsx";
 function App() {
   // Cart holds items {product, qty}
   const [cart, setCart] = useState([]);
+  const [userId, setUserId] = useState(() => {
+      const savedId = localStorage.getItem("userId")
+      return savedId ? JSON.parse(savedId) : null
+  });
 
   // Add product to cart with selected quantity
   //If it exists alert user
@@ -24,6 +28,19 @@ function App() {
     });
   }
 
+  async function addToCartDB(productId, quantity) {
+      try {
+          const response = await fetch("http://localhost:8080/api/carts", {
+              method: "POST",
+              headers: {"Content-Type": "application/json"},
+              body: JSON.stringify({userId: userId, productId: productId, quantity: quantity})
+          })
+      }
+      catch(error) {
+          console.error('Failed to get login', error)
+      }
+  }
+
   return (
     <>
     <Routes>
@@ -37,10 +54,10 @@ function App() {
       <Route path='/login' element={<Login/>}/>
 
       {/* Products Route uses addToCart function to handle clicks */}
-      <Route path='/products' element={<Products addToCart={addToCart}/>} />
+      <Route path='/products' element={<Products addToCart={addToCart} addToCartDB={addToCartDB}/>} />
 
       {/* Cart Route takes Cart State and displays items + total */}
-      <Route path='/cart' element={<Cart cart = {cart}/>} />
+      <Route path='/cart' element={<Cart userId={userId} cart={cart}/>} />
     </Routes>
     </>
   )

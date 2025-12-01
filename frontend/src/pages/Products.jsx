@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import NavBar from "../components/NavBar.jsx";
 import Button from '@mui/material/Button';
 
-function Products({addToCart}) {
+function Products({addToCart, addToCartDB}) {
     // products fetched from backend API
     const [products, setProducts] = useState([]);
 
@@ -89,6 +89,7 @@ function Products({addToCart}) {
                             variant="contained"
                             size="small"
                             onClick={() => addToCart(product, currentQty)}
+                            // onClick={() => addToCartDB(product.product_id, currentQty)}
                         >
                             Add to Cart
                         </Button>

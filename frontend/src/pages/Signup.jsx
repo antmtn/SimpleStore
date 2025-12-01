@@ -22,6 +22,7 @@ function Signup() {
             });
             const data = await response.json();
             if (data > 0) {
+                localStorage.setItem("userId", data);
                 navigate("/")
             }
         }
