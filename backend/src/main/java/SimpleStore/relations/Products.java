@@ -15,11 +15,11 @@ public class Products {
             stmt.addBatch("DROP TABLE IF EXISTS Products");
             stmt.addBatch("""
                 CREATE TABLE Products (
-                    product_id INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                    name       VARCHAR(255) NOT NULL,
-                    price      DECIMAL(10,2) NOT NULL,
-                    quantity   INT NOT NULL,
-                    image      VARCHAR(255) NOT NULL
+                    ProductId INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    Name       VARCHAR(50) NOT NULL,
+                    Price      DECIMAL(8,2) NOT NULL,
+                    Quantity   TINYINT UNSIGNED NOT NULL,
+                    Image      VARCHAR(255) NOT NULL
                 )
                 """);
             stmt.executeBatch();
@@ -27,7 +27,7 @@ public class Products {
     }
 
     public int insert(String name, double price, int qty, String image) throws SQLException {
-        String sql = "INSERT INTO products (name, price, quantity, image) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO products (Name, Price, Quantity, Image) VALUES (?,?,?,?)";
         try (Connection conn = MySQLConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, name);
@@ -45,7 +45,7 @@ public class Products {
             // Display Query results
             StringBuilder sb = new StringBuilder();
             while (rs.next()) {
-                sb.append(rs.getString("name") + "\n");
+                sb.append(rs.getString("Name") + "\n");
             }
             rs.close();
             stmt.close();
@@ -59,11 +59,11 @@ public class Products {
             ResultSet rs = stmt.executeQuery();
             List<Product> products = new ArrayList<>();
             while (rs.next()) {
-                int product_id = rs.getInt("product_id");
-                String name = rs.getString("name");
-                double price = rs.getDouble("price");
-                int qty = rs.getInt("quantity");
-                String image = rs.getString("image");
+                int product_id = rs.getInt("ProductId");
+                String name = rs.getString("Name");
+                double price = rs.getDouble("Price");
+                int qty = rs.getInt("Quantity");
+                String image = rs.getString("Image");
                 products.add(new Product(product_id, name, price, qty, image));
             }
             rs.close();
