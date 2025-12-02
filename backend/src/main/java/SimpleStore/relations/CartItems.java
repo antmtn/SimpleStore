@@ -5,6 +5,7 @@ import SimpleStore.model.Product;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CartItems {
@@ -14,18 +15,25 @@ public class CartItems {
     public void createTable() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection();
              Statement stmt = conn.createStatement()) {
-            stmt.addBatch("DROP TABLE IF EXISTS CartItems");
-            stmt.addBatch("""
+//            stmt.addBatch("DROP TABLE IF EXISTS CartItems");
+            stmt.execute("""
                 CREATE TABLE CartItems (
                     cart_id     INT NOT NULL,
                     product_id  INT NOT NULL,
-                    quantity    INT NOT NULL,
+                    quantity    TINYINT UNSIGNED NOT NULL,
                     FOREIGN KEY (cart_id) REFERENCES Carts(cart_id),
                     FOREIGN KEY (product_id) REFERENCES Products(product_id),
                     PRIMARY KEY(cart_id, product_id)
                 )
                 """);
-            stmt.executeBatch();
+//            stmt.executeBatch();
+        }
+    }
+
+    public void deleteTable() throws SQLException {
+        try (Connection conn = MySQLConnection.getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute("DROP TABLE IF EXISTS CartItems");
         }
     }
 
@@ -59,6 +67,30 @@ public class CartItems {
             rs.close();
             stmt.close();
             return cartItems;
+        }
+    }
+
+    public String getCartNItems() throws SQLException {
+        try (Connection conn = MySQLConnection.getConnection()) {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT cart_id, product_id FROM CartItems");
+            // Display Query results
+            HashMap<Integer, ArrayList<Integer>> ids = new HashMap<>();
+            while (rs.next()) {
+                int cartId = rs.getInt("cart_id");
+                int productId = rs.getInt("product_id");
+                ids.computeIfAbsent(cartId, k -> new ArrayList<>()).add(productId);
+            }
+            StringBuilder sb = new StringBuilder();
+            for (Integer id : ids.keySet()) {
+                sb.append("(").append(id).append(" - ");
+                for (Integer p : ids.get(id))
+                    sb.append(p).append(" ");
+                sb.append(") <br>");
+            }
+            rs.close();
+            stmt.close();
+            return sb.toString();
         }
     }
 }
