@@ -8,8 +8,8 @@ public class Users {
     public void createTable() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection();
              Statement stmt = conn.createStatement()) {
-            stmt.addBatch("DROP TABLE IF EXISTS Users");
-            stmt.addBatch("""
+//            stmt.addBatch("DROP TABLE IF EXISTS Users");
+            stmt.execute("""
                 CREATE TABLE Users (
                     user_id     INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     is_admin    BOOLEAN DEFAULT FALSE,
@@ -17,7 +17,14 @@ public class Users {
                     password    VARCHAR(255) NOT NULL
                 )
                 """);
-            stmt.executeBatch();
+//            stmt.executeBatch();
+        }
+    }
+
+    public void deleteTable() throws SQLException {
+        try (Connection conn = MySQLConnection.getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute("DROP TABLE IF EXISTS Users");
         }
     }
 
@@ -66,6 +73,21 @@ public class Users {
                 }
             }
             return 0;
+        }
+    }
+
+    public String getUsernames() throws SQLException {
+        try (Connection conn = MySQLConnection.getConnection()) {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT user_id, username FROM Users");
+            // Display Query results
+            StringBuilder sb = new StringBuilder();
+            while (rs.next()) {
+                sb.append("(" + rs.getString("user_id") + ", " + rs.getString("username") + ") ");
+            }
+            rs.close();
+            stmt.close();
+            return sb.toString();
         }
     }
 }

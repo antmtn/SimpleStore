@@ -8,14 +8,30 @@ public class Carts {
     public void createTable() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection();
              Statement stmt = conn.createStatement()) {
-            stmt.addBatch("DROP TABLE IF EXISTS Carts");
-            stmt.addBatch("""
+//            stmt.addBatch("DROP TABLE IF EXISTS Carts");
+            stmt.execute("""
                 CREATE TABLE Carts (
                     cart_id     INT PRIMARY KEY AUTO_INCREMENT,
                     user_id     INT REFERENCES Users(user_id)
                 )
                 """);
-            stmt.executeBatch();
+//            stmt.executeBatch();
+        }
+    }
+
+    public void deleteTable() throws SQLException {
+        try (Connection conn = MySQLConnection.getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute("DROP TABLE IF EXISTS Carts");
+        }
+    }
+
+    public int insert(int userId) throws SQLException {
+        String sql = "INSERT INTO Carts (user_id) VALUES (?)";
+        try (Connection conn = MySQLConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            return ps.executeUpdate();
         }
     }
 
@@ -39,6 +55,21 @@ public class Carts {
                 }
             }
             return 0;
+        }
+    }
+
+    public String getUserCart() throws SQLException {
+        try (Connection conn = MySQLConnection.getConnection()) {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Carts");
+            // Display Query results
+            StringBuilder sb = new StringBuilder();
+            while (rs.next()) {
+                sb.append("(" + rs.getString("user_id") + ", " + rs.getString("cart_id") + ") ");
+            }
+            rs.close();
+            stmt.close();
+            return sb.toString();
         }
     }
 }

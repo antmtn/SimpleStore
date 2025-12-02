@@ -12,40 +12,55 @@ public class Products {
     public void createTable() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection();
              Statement stmt = conn.createStatement()) {
-            stmt.addBatch("DROP TABLE IF EXISTS Products");
-            stmt.addBatch("""
+            stmt.execute("""
                 CREATE TABLE Products (
-                    ProductId INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                    Name       VARCHAR(50) NOT NULL,
-                    Price      DECIMAL(8,2) NOT NULL,
-                    Quantity   TINYINT UNSIGNED NOT NULL,
-                    Image      VARCHAR(255) NOT NULL
+                    product_id INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    name       VARCHAR(50) NOT NULL,
+                    price      DECIMAL(8,2) NOT NULL,
+                    quantity   INT NOT NULL,
+                    image      VARCHAR(255) NOT NULL
                 )
                 """);
-            stmt.executeBatch();
+//            stmt.executeBatch();
+        }
+    }
+
+    public void deleteTable() throws SQLException {
+        try (Connection conn = MySQLConnection.getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute("DROP TABLE IF EXISTS Products");
         }
     }
 
     public int insert(String name, double price, int qty, String image) throws SQLException {
-        String sql = "INSERT INTO products (Name, Price, Quantity, Image) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO Products (name, price, quantity, image) VALUES (?,?,?,?)";
         try (Connection conn = MySQLConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, name);
             ps.setDouble(2, price);
             ps.setInt(3, qty);
             ps.setString(4, image);
-            return ps.executeUpdate();
+            ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+
+            throw new SQLException("Failed to insert product");
         }
     }
 
     public String getNames() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection()) {
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT name FROM Products");
+            ResultSet rs = stmt.executeQuery("SELECT product_id, name FROM Products");
             // Display Query results
             StringBuilder sb = new StringBuilder();
             while (rs.next()) {
-                sb.append(rs.getString("Name") + "\n");
+                sb.append("(").append(rs.getInt("product_id")).append(", ");
+                sb.append(rs.getString("name") + ") ");
             }
             rs.close();
             stmt.close();
@@ -59,11 +74,11 @@ public class Products {
             ResultSet rs = stmt.executeQuery();
             List<Product> products = new ArrayList<>();
             while (rs.next()) {
-                int product_id = rs.getInt("ProductId");
-                String name = rs.getString("Name");
-                double price = rs.getDouble("Price");
-                int qty = rs.getInt("Quantity");
-                String image = rs.getString("Image");
+                int product_id = rs.getInt("product_id");
+                String name = rs.getString("name");
+                double price = rs.getDouble("price");
+                int qty = rs.getInt("quantity");
+                String image = rs.getString("image");
                 products.add(new Product(product_id, name, price, qty, image));
             }
             rs.close();
