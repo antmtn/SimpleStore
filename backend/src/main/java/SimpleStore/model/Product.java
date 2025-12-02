@@ -5,14 +5,14 @@ import jakarta.persistence.*;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int product_id;
+    private int productId;
     private String name;
     private double price;
     private int qty;
     private String image;
 
     public Product(int productId, String name, double price, int qty, String image) {
-        this.product_id = productId;
+        this.productId = productId;
         this.name = name;
         this.price = price;
         this.qty = qty;
@@ -23,7 +23,7 @@ public class Product {
 
     }
     public int getProduct_id() {
-        return product_id;
+        return productId;
     }
 
     public double getPrice() {
