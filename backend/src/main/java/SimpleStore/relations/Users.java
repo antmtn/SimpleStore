@@ -13,7 +13,7 @@ public class Users {
                 CREATE TABLE Users (
                     user_id     INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     is_admin    BOOLEAN DEFAULT FALSE,
-                    username    VARCHAR(255) NOT NULL,
+                    username    VARCHAR(255) NOT NULL UNIQUE,
                     password    VARCHAR(255) NOT NULL
                 )
                 """);
