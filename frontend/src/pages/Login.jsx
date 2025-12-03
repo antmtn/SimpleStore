@@ -26,6 +26,7 @@ function Login({setUserId}) {
                 localStorage.setItem("userId", data);
                 setUserId(data)
                 navigate("/");
+                console.log('Login success, navigating home with userId:', data);
             }
         }
         catch(error) {

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Products from "./pages/Products.jsx";
 import Home from "./pages/Home.jsx";
 import Cart from "./pages/Cart.jsx";
@@ -58,10 +58,10 @@ function App() {
       <Route path='/products' element={<Products addToCart={addToCart} addToCartDB={addToCartDB}/>} />
 
       {/* Cart Route takes Cart State and displays items + total */}
-      <Route path='/cart' element={<Cart userId={userId} cart={cart}/>} />
+      <Route path='/cart'element={!!userId ? <Cart userId={userId} cart={cart} /> : <Navigate to="/login" replace />} />
 
       {/* Orders Route) */}
-      <Route path='/orders' element={<Order userId={userId} />} />
+      <Route path='/orders' element={!!userId ? <Order userId={userId} /> : <Navigate to="/login" replace/>} />
     </Routes>
     </>
   )
