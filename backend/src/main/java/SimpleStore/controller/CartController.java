@@ -25,6 +25,16 @@ public class CartController {
         cartItems.insert(request.getUserId(), request.getProductId(), request.getQuantity());
     }
 
+    @PostMapping
+    public void updateCart(@RequestBody CartProductRequest request) throws SQLException {
+        cartItems.updateItemQuantity(request.getUserId(), request.getProductId(), request.getQuantity());
+    }
+
+    @PostMapping
+    public void deleteFromCart(@RequestBody CartProductRequest request) throws SQLException {
+        cartItems.deleteProduct(request.getUserId(), request.getProductId());
+    }
+
     public static class CartProductRequest {
         private int userId;
         private int productId;
