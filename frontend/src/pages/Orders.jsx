@@ -6,17 +6,20 @@ import {useEffect, useState} from "react";
 
 function Orders({userId}) {
     // orders fetched from backend API
-    const [orders, setOrders] = useState([]);
+    const [orders, setOrders] = useState({});
 
     // Loads products in the beginning
     useEffect(() => {
       fetchOrders()
-    }, []);
+    }, [userId]);
 
     // Fetch to API
     const fetchOrders = async () => {
+    if (!userId) {
+        return;
+    }
       try {
-          const response = await fetch("http://localhost:8080/api/orders");
+          const response = await fetch(`http://localhost:8080/api/orders/${userId}`);
           const data = await response.json();
           setOrders(data)
 
@@ -30,6 +33,21 @@ function Orders({userId}) {
         <>
         <NavBar />
         <h1 style={{ marginLeft: '16px' }}>Orders</h1>
+        {Object.entries(orders).map(([orderId, products]) => (
+                <Box key={orderId} sx={{mb: 1}}>
+                <p><strong>Order Number: {orderId}</strong></p>
+                {products.map((product) => (
+                    <Box key={product.product_id} sx={{mb: 1}}>
+                    <p>Product Name: {product.name}</p>
+                    <p>Price: {product.price.toFixed(2)}</p>
+                    <p>Quantity: {product.qty}</p>
+                    </Box>
+                ))}
+                    <p>
+                        Order Total: ${products.reduce((total, product) => total + (product.price * product.qty), 0).toFixed(2)}
+                    </p>
+            </Box>
+            ))}
         </>
     );
 }

@@ -2,6 +2,7 @@ package SimpleStore.relations;
 
 import SimpleStore.MySQLConnection;
 import SimpleStore.model.OrderItem;
+import SimpleStore.model.Product;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -64,6 +65,30 @@ public class OrderItems {
                             rs.getInt("order_id"),
                             rs.getInt("product_id"),
                             rs.getInt("quantity")
+                    ));
+                }
+                return items;
+            }
+        }
+    }
+
+    public List<Product> getOrderProducts(int orderId) throws SQLException {
+        String sql = "SELECT o.product_id, name, price, o.quantity, image FROM OrderItems o INNER JOIN Products p ON o.product_id=p.product_id WHERE order_id = ?";
+
+        try (Connection conn = MySQLConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, orderId);
+
+            List<Product> items = new ArrayList<>();
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    items.add(new Product(
+                            rs.getInt("product_id"),
+                            rs.getString("name"),
+                            rs.getDouble("price"),
+                            rs.getInt("quantity"),
+                            rs.getString("image")
                     ));
                 }
                 return items;
