@@ -2,8 +2,9 @@ import NavBar from "../components/NavBar.jsx";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import {useEffect, useState} from "react";
 
-function Orders({cart}) {
+function Orders({userId}) {
     // orders fetched from backend API
     const [orders, setOrders] = useState([]);
 

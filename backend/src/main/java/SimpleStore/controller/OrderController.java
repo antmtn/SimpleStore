@@ -22,8 +22,8 @@ public class OrderController {
     private final Orders orders = new Orders();
     private final OrderItems orderItems = new OrderItems();
 
-    @GetMapping
-    public List<OrderWithItems> getAllOrdersWithItems() throws SQLException {
+    @GetMapping("/{userId}")
+    public List<OrderWithItems> getAllOrdersWithItems(@PathVariable int userId) throws SQLException {
         List<Order> ord = orders.getAllOrders();
         List<OrderWithItems> result = new ArrayList<>();
 

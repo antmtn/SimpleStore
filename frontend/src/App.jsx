@@ -5,6 +5,7 @@ import Home from "./pages/Home.jsx";
 import Cart from "./pages/Cart.jsx";
 import Signup from "./pages/Signup.jsx";
 import Login from "./pages/Login.jsx";
+import Order from "./pages/Orders.jsx";
 
 function App() {
   // Cart holds items {product, qty}
@@ -58,6 +59,9 @@ function App() {
 
       {/* Cart Route takes Cart State and displays items + total */}
       <Route path='/cart' element={<Cart userId={userId} cart={cart}/>} />
+
+      {/* Orders Route) */}
+      <Route path='/orders' element={<Order userId={userId} />} />
     </Routes>
     </>
   )

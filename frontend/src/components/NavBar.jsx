@@ -49,6 +49,12 @@ function NavBar() {
         <Box sx={{ marginLeft: 'auto', display: 'flex', gap: 1 }}>
           <Button
             component={Link}
+            to="/orders"
+            color="inherit"
+            size="small"
+            >Orders</Button>
+          <Button
+            component={Link}
             to="/cart"
             color="inherit"
             size="small"
