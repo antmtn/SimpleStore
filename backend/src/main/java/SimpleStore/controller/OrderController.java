@@ -68,7 +68,7 @@ public class OrderController {
 
     @PostMapping
     public int insertOrder(@RequestBody Request request) throws SQLException {
-        return orders.insertOrder(request.getUserId());
+        return orders.insert(request.getUserId());
     }
 
     @PostMapping("/items")

@@ -39,7 +39,7 @@ public class Controller {
         int shirtId = products.insert("shirt", 4.99, 10, "https://m.media-amazon.com/images/I/81-pkxp9h-L._AC_UY1000_.jpg");
         int sweaterId = products.insert("sweater", 13.99, 6, "https://cdni.llbean.net/is/image/wim/505183_1155_41?hei=1095&wid=950&resMode=sharp2&defaultImage=llbprod/505183_0_44");
         int shoesId = products.insert("shoes", 49.99, 2, "https://www.converse.com/dw/image/v2/BCZC_PRD/on/demandware.static/-/Sites-cnv-master-catalog/default/dw96d51de8/images/a_08/M9160_A_08X1.jpg?sw=406&strip=false");
-        int waterId = products.insert("water bottle", 10.99, 100, "https://target.scene7.com/is/image/Target/GUEST_5ad40e9f-b69c-45c5-9d3d-7b2704314d2d");
+        int waterBottleId = products.insert("water bottle", 10.99, 100, "https://target.scene7.com/is/image/Target/GUEST_5ad40e9f-b69c-45c5-9d3d-7b2704314d2d");
         int chargerId = products.insert("charger", 14.99, 20, "https://m.media-amazon.com/images/I/41MAlBJ6BhL._AC_UF1000,1000_QL80_.jpg");
         int backpackId = products.insert("backpack", 30.99, 5, "https://solo-ny.com/cdn/shop/files/UBN795-4_HO_887bba68-33a4-48d5-a1b6-b5947c6164ac.jpg?v=1695140976");
         int laptopId = products.insert("laptop", 499.99, 6, "https://i5.walmartimages.com/seo/HP-15-6-Touch-Screen-Laptop-Intel-Core-i3-8GB-Memory-256GB-SSD-Silver-Notebook-PC_435571a0-a644-4f27-9e39-19e6c16f76c0.74549be46a6830f4a58dcf9502abc982.jpeg");
@@ -91,8 +91,8 @@ public class Controller {
         // cartItems
         cartItems.insert(u0, chocolateId, 1);
         cartItems.insert(u0, shirtId, 2);
+        cartItems.insert(u0, waterBottleId, 4);
         cartItems.insert(u0, headphonesId, 1);
-        cartItems.insert(u0, waterId, 4);
 
         cartItems.insert(u1, sweaterId, 1);
         cartItems.insert(u1, shoesId, 1);
@@ -108,14 +108,60 @@ public class Controller {
 
         cartItems.insert(u3, mugId, 1);
 
-//        orders;
-//        orderItems;
 
+        // orders
+        int u0Order1 = orders.insert(u0);
+
+        int u1Order1 = orders.insert(u1);
+        int u1Order2 = orders.insert(u1);
+
+        int u2Order1 = orders.insert(u2);
+        int u2Order2 = orders.insert(u2);
+        int u2Order3 = orders.insert(u2);
+        int u2Order4 = orders.insert(u2);
+        int u2Order5 = orders.insert(u2);
+
+        int u3Order1 = orders.insert(u3);
+        int u3Order2 = orders.insert(u3);
+        int u3Order3 = orders.insert(u3);
+        int u3Order4 = orders.insert(u3);
+        int u3Order5 = orders.insert(u3);
+        int u3Order6 = orders.insert(u3);
+        int u3Order7 = orders.insert(u3);
+
+
+        // orderItems
+        orderItems.insert(u0Order1, chocolateId, 1);
+
+        orderItems.insert(u1Order1, chocolateId, 5);
+        orderItems.insert(u1Order1, waterBottleId, 1);
+        orderItems.insert(u1Order2, chargerId, 1);
+
+        orderItems.insert(u2Order1, shirtId, 1);
+        orderItems.insert(u2Order2, laptopId, 1);
+        orderItems.insert(u2Order3, shoesId, 1);
+        orderItems.insert(u2Order4, backpackId, 1);
+        orderItems.insert(u2Order5, headphonesId, 1);
+
+        orderItems.insert(u3Order1, tableId, 1);
+        orderItems.insert(u3Order2, notebookId, 3);
+        orderItems.insert(u3Order2, penId, 2);
+        orderItems.insert(u3Order3, chiikawaId, 10);
+        orderItems.insert(u3Order4, keychainId, 2);
+        orderItems.insert(u3Order5, laptopId, 1);
+        orderItems.insert(u3Order5, chargerId, 1);
+        orderItems.insert(u3Order6, keychainId, 6);
+        orderItems.insert(u3Order7, chocolateId, 11);
+
+
+        // display
         StringBuilder sb = new StringBuilder();
-        sb.append("Products: ").append(products.getNames()).append("<br><br>");
-        sb.append("Users: ").append(users.getUsernames()).append("<br><br>");
-        sb.append("Carts: ").append(carts.getUserCart()).append("<br><br>");
-        sb.append("CartItems:<br>").append(cartItems.getCartNItems()).append("<br><br>");
+        sb.append("Products: ").append(products.getNames()).append("<br><br>"); // id + name
+        sb.append("Users: ").append(users.getUsernames()).append("<br><br>"); // id + username
+        sb.append("Carts: ").append(carts.getUserCart()).append("<br><br>"); // userId + cartId
+        sb.append("CartItems:<br>").append(cartItems.getCartNItemsQuantities()).append("<br><br>"); // cartId + (cartItems + quantity)
+        sb.append("Orders:<br>").append(orders.getUserOrder()).append("<br><br>"); // userId + orderId
+        sb.append("OrderItems:<br>").append(orderItems.getOrderNItemsQuantities()).append("<br><br>"); // orderId + (items + quantity)
 
         return sb.toString();
     }
@@ -123,10 +169,12 @@ public class Controller {
     @GetMapping("/viewDB")
     public String viewDB() throws SQLException {
         StringBuilder sb = new StringBuilder();
-        sb.append("Products: ").append(products.getNames()).append("<br><br>");
-        sb.append("Users: ").append(users.getUsernames()).append("<br><br>");
-        sb.append("Carts: ").append(carts.getUserCart()).append("<br><br>");
-        sb.append("CartItems:<br>").append(cartItems.getCartNItems()).append("<br><br>");
+        sb.append("Products: ").append(products.getNames()).append("<br><br>"); // id + name
+        sb.append("Users: ").append(users.getUsernames()).append("<br><br>"); // id + username
+        sb.append("Carts: ").append(carts.getUserCart()).append("<br><br>"); // userId + cartId
+        sb.append("CartItems:<br>").append(cartItems.getCartNItemsQuantities()).append("<br><br>"); // cartId + (cartItems + quantity)
+        sb.append("Orders:<br>").append(orders.getUserOrder()).append("<br><br>"); // userId + orderId
+        sb.append("OrderItems:<br>").append(orderItems.getOrderNItemsQuantities()).append("<br><br>"); // orderId + (items + quantity)
 
         return sb.toString();
     }

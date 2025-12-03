@@ -6,6 +6,7 @@ import SimpleStore.model.Product;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class OrderItems {
@@ -111,6 +112,35 @@ public class OrderItems {
             rs.close();
             stmt.close();
             return items;
+        }
+    }
+
+    // get the string of all order id and its products + quantity
+    public String getOrderNItemsQuantities() throws SQLException {
+        try (Connection conn = MySQLConnection.getConnection()) {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT order_id, product_id, quantity FROM OrderItems");
+            // Display Query results
+            HashMap<Integer, ArrayList<String>> items = new HashMap<>();
+            while (rs.next()) {
+                int orderId = rs.getInt("order_id");
+                int productId = rs.getInt("product_id");
+                int quantity = rs.getInt("quantity");
+
+                String productQuantity = "(" + productId + "," + quantity + ")";
+                items.computeIfAbsent(orderId, k -> new ArrayList<>()).add(productQuantity);
+            }
+
+            StringBuilder sb = new StringBuilder();
+            for (Integer id : items.keySet()) {
+                sb.append("(").append(id).append(" - ");
+                for (String pq : items.get(id))
+                    sb.append(pq).append(" ");
+                sb.append(") <br>");
+            }
+            rs.close();
+            stmt.close();
+            return sb.toString();
         }
     }
 

@@ -99,23 +99,27 @@ public class CartItems {
         }
     }
 
-    // get the string of all cart id and its products
-    public String getCartNItems() throws SQLException {
+    // get the string of all cart id and its products + quantity
+    public String getCartNItemsQuantities() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection()) {
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT cart_id, product_id FROM CartItems");
+            ResultSet rs = stmt.executeQuery("SELECT cart_id, product_id, quantity FROM CartItems");
             // Display Query results
-            HashMap<Integer, ArrayList<Integer>> ids = new HashMap<>();
+            HashMap<Integer, ArrayList<String>> items = new HashMap<>();
             while (rs.next()) {
                 int cartId = rs.getInt("cart_id");
                 int productId = rs.getInt("product_id");
-                ids.computeIfAbsent(cartId, k -> new ArrayList<>()).add(productId);
+                int quantity = rs.getInt("quantity");
+
+                String productQuantity = "(" + productId + "," + quantity + ")";
+                items.computeIfAbsent(cartId, k -> new ArrayList<>()).add(productQuantity);
             }
+
             StringBuilder sb = new StringBuilder();
-            for (Integer id : ids.keySet()) {
+            for (Integer id : items.keySet()) {
                 sb.append("(").append(id).append(" - ");
-                for (Integer p : ids.get(id))
-                    sb.append(p).append(" ");
+                for (String pq : items.get(id))
+                    sb.append(pq).append(" ");
                 sb.append(") <br>");
             }
             rs.close();
