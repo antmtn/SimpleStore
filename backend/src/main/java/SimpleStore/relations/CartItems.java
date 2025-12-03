@@ -70,6 +70,35 @@ public class CartItems {
         }
     }
 
+    public int updateItemQuantity(int user_id, int productId, int newQuantity) throws SQLException {
+        String sql = "UPDATE CartItems SET quantity = ? WHERE cart_id = ? AND product_id = ?";
+        int cartId = carts.findCartId(user_id);
+        try (Connection conn = MySQLConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, newQuantity);
+            stmt.setInt(2, cartId);
+            stmt.setInt(3, productId);
+
+            return stmt.executeUpdate();
+        }
+    }
+
+    public int deleteProduct(int user_id, int productId) throws SQLException {
+        String sql = "DELETE FROM CartItems WHERE cart_id = ? AND product_id = ?";
+        int cartId = carts.findCartId(user_id);
+
+        try (Connection conn = MySQLConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, cartId);
+            ps.setInt(2, productId);
+
+            return ps.executeUpdate();
+        }
+    }
+
+    // get the string of all cart id and its products
     public String getCartNItems() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection()) {
             Statement stmt = conn.createStatement();
