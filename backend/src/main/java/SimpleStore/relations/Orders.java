@@ -31,7 +31,7 @@ public class Orders {
         }
     }
 
-    public int insertOrder(int userId) throws SQLException {
+    public int insert(int userId) throws SQLException {
         String sql = "INSERT INTO Orders (user_id) VALUES (?)";
 
         try (Connection conn = MySQLConnection.getConnection();
@@ -85,6 +85,21 @@ public class Orders {
             rs.close();
             stmt.close();
             return orders;
+        }
+    }
+
+    public String getUserOrder() throws SQLException {
+        try (Connection conn = MySQLConnection.getConnection()) {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Orders");
+            // Display Query results
+            StringBuilder sb = new StringBuilder();
+            while (rs.next()) {
+                sb.append("(" + rs.getString("user_id") + ", " + rs.getString("order_id") + ") ");
+            }
+            rs.close();
+            stmt.close();
+            return sb.toString();
         }
     }
 

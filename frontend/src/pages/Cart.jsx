@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 // Receives array of products and their quantity
 function Cart({userId, cart}) {
@@ -14,9 +15,45 @@ function Cart({userId, cart}) {
 
   const isEmpty = savedCart.length === 0;
 
+  const navigate = useNavigate()
+
     useEffect(() => {
         fetchSavedItems()
     }, [userId]);
+
+    async function saveOrder() {
+        try {
+            const orderResponse = await fetch("http://localhost:8080/api/orders", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({userId: userId})
+            })
+            const orderId = await orderResponse.json();
+            await Promise.all(
+                savedCart.map((item) =>
+                    fetch("http://localhost:8080/api/orders/items", {
+                            method: "POST",
+                            headers: {"Content-Type": "application/json"},
+                            body: JSON.stringify({orderId: orderId, productId: item.product_id, quantity: item.qty})
+                    })
+                )
+            )
+            await Promise.all(
+                savedCart.map((item) =>
+                    fetch("http://localhost:8080/api/carts/delete", {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({userId: userId, productId: item.product_id})
+                    })
+                )
+            )
+            await fetchSavedItems()
+            navigate("/orders")
+        }
+        catch(error) {
+            console.error('Failed to save order', error)
+        }
+    }
 
     async function fetchSavedItems() {
         if (!userId) {
@@ -87,7 +124,7 @@ function Cart({userId, cart}) {
                   <Box key={item.product_id} sx={{mb: 1}}>
                       {item.name} — Qty: {item.qty} — ${item.price} each — Total: $
                       {(item.price * item.qty).toFixed(2)}
-                      <select 
+                      <select
                             value={item.qty}
                             onChange={e =>
                                 updateFromSavedCart(item.product_id, e.target.value)
@@ -96,7 +133,7 @@ function Cart({userId, cart}) {
                             <option key={n} value={n}>{n}</option>
                             ))}
                         </select>
-                      
+
                       <button onClick={e => deleteFromSavedCart(item.product_id)}>Delete From Cart</button>
                   </Box>
               )))
@@ -111,7 +148,7 @@ function Cart({userId, cart}) {
          {/* ))*/}
          {/*}*/}
          {!isEmpty && (
-             <Button variant="contained">Order Products</Button>
+             <Button variant="contained" onClick={saveOrder}>Order Products</Button>
          )}
       </Box>
     </>

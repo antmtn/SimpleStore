@@ -2,9 +2,11 @@ package SimpleStore.relations;
 
 import SimpleStore.MySQLConnection;
 import SimpleStore.model.OrderItem;
+import SimpleStore.model.Product;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class OrderItems {
@@ -71,6 +73,30 @@ public class OrderItems {
         }
     }
 
+    public List<Product> getOrderProducts(int orderId) throws SQLException {
+        String sql = "SELECT o.product_id, name, price, o.quantity, image FROM OrderItems o INNER JOIN Products p ON o.product_id=p.product_id WHERE order_id = ?";
+
+        try (Connection conn = MySQLConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, orderId);
+
+            List<Product> items = new ArrayList<>();
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    items.add(new Product(
+                            rs.getInt("product_id"),
+                            rs.getString("name"),
+                            rs.getDouble("price"),
+                            rs.getInt("quantity"),
+                            rs.getString("image")
+                    ));
+                }
+                return items;
+            }
+        }
+    }
+
     // get all rows of table
     public List<OrderItem> getAllOrderItems() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection()) {
@@ -86,6 +112,35 @@ public class OrderItems {
             rs.close();
             stmt.close();
             return items;
+        }
+    }
+
+    // get the string of all order id and its products + quantity
+    public String getOrderNItemsQuantities() throws SQLException {
+        try (Connection conn = MySQLConnection.getConnection()) {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT order_id, product_id, quantity FROM OrderItems");
+            // Display Query results
+            HashMap<Integer, ArrayList<String>> items = new HashMap<>();
+            while (rs.next()) {
+                int orderId = rs.getInt("order_id");
+                int productId = rs.getInt("product_id");
+                int quantity = rs.getInt("quantity");
+
+                String productQuantity = "(" + productId + "," + quantity + ")";
+                items.computeIfAbsent(orderId, k -> new ArrayList<>()).add(productQuantity);
+            }
+
+            StringBuilder sb = new StringBuilder();
+            for (Integer id : items.keySet()) {
+                sb.append("(").append(id).append(" - ");
+                for (String pq : items.get(id))
+                    sb.append(pq).append(" ");
+                sb.append(") <br>");
+            }
+            rs.close();
+            stmt.close();
+            return sb.toString();
         }
     }
 
