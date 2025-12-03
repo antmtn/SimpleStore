@@ -25,12 +25,12 @@ public class CartController {
         cartItems.insert(request.getUserId(), request.getProductId(), request.getQuantity());
     }
 
-    @PostMapping
+    @PostMapping("/update")
     public void updateCart(@RequestBody CartProductRequest request) throws SQLException {
         cartItems.updateItemQuantity(request.getUserId(), request.getProductId(), request.getQuantity());
     }
 
-    @PostMapping
+    @PostMapping("/delete")
     public void deleteFromCart(@RequestBody CartProductRequest request) throws SQLException {
         cartItems.deleteProduct(request.getUserId(), request.getProductId());
     }

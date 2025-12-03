@@ -32,6 +32,37 @@ function Cart({userId, cart}) {
         }
     }
 
+    async function deleteFromSavedCart(productId){
+      if (!userId) return;
+      try {
+        const response = await fetch("http://localhost:8080/api/carts/delete", {
+              method: "POST",
+              headers: {"Content-Type": "application/json"},
+              body: JSON.stringify({userId: userId, productId: productId})
+          });
+        // Refresh list
+        await fetchSavedItems();
+      } catch (err) {
+        console.error('Failed to delete cart item', err);
+      }
+    }
+
+    async function updateFromSavedCart(productId, quantity){
+      if (!userId) return;
+      try {
+        //alert("Quantity:" + quantity);
+        const response = await fetch("http://localhost:8080/api/carts/update", {
+              method: "POST",
+              headers: {"Content-Type": "application/json"},
+              body: JSON.stringify({userId: userId, productId: productId, quantity: quantity})
+          });
+        // Refresh list
+        await fetchSavedItems();
+      } catch (err) {
+        console.error('Failed to update cart item', err);
+      }
+    }
+
   return (
     <>
       <NavBar />
@@ -56,6 +87,17 @@ function Cart({userId, cart}) {
                   <Box key={item.product_id} sx={{mb: 1}}>
                       {item.name} — Qty: {item.qty} — ${item.price} each — Total: $
                       {(item.price * item.qty).toFixed(2)}
+                      <select 
+                            value={item.qty}
+                            onChange={e =>
+                                updateFromSavedCart(item.product_id, e.target.value)
+                            }>
+                            {[1,2,3,4,5,6,7,8,9,10].map(n => (
+                            <option key={n} value={n}>{n}</option>
+                            ))}
+                        </select>
+                      
+                      <button onClick={e => deleteFromSavedCart(item.product_id)}>Delete From Cart</button>
                   </Box>
               )))
           }
