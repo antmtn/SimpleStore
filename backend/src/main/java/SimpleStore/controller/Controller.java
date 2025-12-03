@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
+
 @RestController
 @RequestMapping("/api/admin")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -109,6 +111,17 @@ public class Controller {
 //        orders;
 //        orderItems;
 
+        StringBuilder sb = new StringBuilder();
+        sb.append("Products: ").append(products.getNames()).append("<br><br>");
+        sb.append("Users: ").append(users.getUsernames()).append("<br><br>");
+        sb.append("Carts: ").append(carts.getUserCart()).append("<br><br>");
+        sb.append("CartItems:<br>").append(cartItems.getCartNItems()).append("<br><br>");
+
+        return sb.toString();
+    }
+
+    @GetMapping("/viewDB")
+    public String viewDB() throws SQLException {
         StringBuilder sb = new StringBuilder();
         sb.append("Products: ").append(products.getNames()).append("<br><br>");
         sb.append("Users: ").append(users.getUsernames()).append("<br><br>");

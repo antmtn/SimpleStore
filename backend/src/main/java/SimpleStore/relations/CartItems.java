@@ -71,6 +71,7 @@ public class CartItems {
     }
 
     public int updateItemQuantity(int user_id, int productId, int newQuantity) throws SQLException {
+        //System.out.println("Update Request Received " + user_id + " " + productId + " " + newQuantity);
         String sql = "UPDATE CartItems SET quantity = ? WHERE cart_id = ? AND product_id = ?";
         int cartId = carts.findCartId(user_id);
         try (Connection conn = MySQLConnection.getConnection();
