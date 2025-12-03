@@ -5,6 +5,7 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Signup({setUserId}) {
 
@@ -39,6 +40,13 @@ function Signup({setUserId}) {
                 <TextField label="Username" value={username} onChange={(e) => setUsername(e.target.value)}/>
                 <TextField label="Password" type='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
                 <Button variant="contained" onClick={handleSignup}>Sign Up</Button>
+
+                <Typography variant="body2">
+                  Already have an account?{" "}
+                  <Link to="/login" style={{ textDecoration: "none", color: "#1976d2" }}>
+                    Log in
+                  </Link>
+                </Typography>
             </Paper>
         </Grid>
     )
