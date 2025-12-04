@@ -17,7 +17,7 @@ public class Products {
                     product_id INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     name       VARCHAR(50) NOT NULL,
                     price      DECIMAL(8,2) NOT NULL,
-                    quantity   INT NOT NULL,
+                    quantity   INT UNSIGNED NOT NULL,
                     image      VARCHAR(255) NOT NULL
                 )
                 """);
