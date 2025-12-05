@@ -22,6 +22,13 @@ public class ProductController {
         return products.getAll();
     }
 
+    @GetMapping("/under")
+    public List<Product> getProductsUnderPrice(@RequestParam("maxPrice") double maxPrice)
+            throws SQLException {
+        return products.getUnderPrice(maxPrice);
+    }
+
+
     @PostMapping
     public void addProduct(@RequestBody String name, double price, int quantity, String image) throws SQLException {
         products.insert(name, price, quantity, image);

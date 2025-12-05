@@ -87,4 +87,27 @@ public class Products {
         }
     }
 
+    public List<Product> getUnderPrice(double maxPrice) throws SQLException {
+        String sql = "SELECT * FROM Products WHERE price <= ?";
+        try (Connection conn = MySQLConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setDouble(1, maxPrice);
+            ResultSet rs = stmt.executeQuery();
+
+            List<Product> products = new ArrayList<>();
+            while (rs.next()) {
+                int product_id = rs.getInt("product_id");
+                String name = rs.getString("name");
+                double price = rs.getDouble("price");
+                int qty = rs.getInt("quantity");
+                String image = rs.getString("image");
+                products.add(new Product(product_id, name, price, qty, image));
+            }
+            rs.close();
+            stmt.close();
+            return products;
+        }
+    }
+
 }

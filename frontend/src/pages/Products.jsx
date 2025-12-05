@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 function Products({addToCart, addToCartDB}) {
     // products fetched from backend API
     const [products, setProducts] = useState([]);
+    const [maxPrice, setMaxPrice] = useState('');
 
     // Loads products in the beginning
     useEffect(() => {
@@ -14,9 +15,13 @@ function Products({addToCart, addToCartDB}) {
     }, []);
 
     // Fetch to API 
-    const fetchProducts = async () => {
+    const fetchProducts = async (priceFilter) => {
         try {
-            const response = await fetch("http://localhost:8080/api/products");
+            const baseUrl = "http://localhost:8080/api/products";
+            const url = priceFilter
+                ? `${baseUrl}/under?maxPrice=${priceFilter}`
+                : baseUrl;
+            const response = await fetch(url);
             const data = await response.json();
             setProducts(data)
 
@@ -33,6 +38,43 @@ function Products({addToCart, addToCartDB}) {
         <>
             <NavBar />
             <h1 style={{ marginLeft: '16px' }}>Products</h1>
+
+            <div style={{ marginLeft: '16px', marginBottom: '12px' }}>
+                <input
+                    type="number"
+                    placeholder="Enter max price"
+                    value={maxPrice}
+                    onChange={e => setMaxPrice(e.target.value)}
+                    style={{ marginRight: '8px', padding: '4px 8px' }}
+                />
+
+                <Button
+                    variant="contained"
+                    size="small"
+                    style={{ marginRight: '8px' }}
+                    onClick={() => {
+                        if (maxPrice === '') {
+                            fetchProducts(); // nothing entered: show all
+                        } else {
+                            fetchProducts(maxPrice);
+                        }
+                    }}
+                >
+                    APPLY FILTER
+                </Button>
+
+                <Button
+                    variant="contained"
+                    size="small"
+                    onClick={() => {
+                        setMaxPrice('');
+                        fetchProducts();      // back to all products
+                    }}
+                >
+                    REMOVE PRICE FILTER
+                </Button>
+            </div>
+
             <Box elevation={6} variant="outlined" square={true} sx={{ display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
                 gap: 2,
