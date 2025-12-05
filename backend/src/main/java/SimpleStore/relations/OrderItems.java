@@ -11,6 +11,7 @@ import java.util.List;
 
 public class OrderItems {
 
+    // This creates the table OrderItems 
     public void createTable() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection();
              Statement stmt = conn.createStatement()) {
@@ -29,6 +30,7 @@ public class OrderItems {
         }
     }
 
+    // This deletes the OrderItems table if needed
     public void deleteTable() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection();
              Statement stmt = conn.createStatement()) {
@@ -36,6 +38,7 @@ public class OrderItems {
         }
     }
 
+    // This inserts an order item into the table with the given orderId, productId, and quantity
     public void insert(int orderId, int productId, int quantity) throws SQLException {
         String sql = "INSERT INTO OrderItems (order_id, product_id, quantity) VALUES (?, ?, ?)";
 
@@ -73,6 +76,8 @@ public class OrderItems {
         }
     }
 
+    // This gets all of the products from a given order by doing an INNER JOIN on Products
+    // where the order_id matches the given one. 
     public List<Product> getOrderProducts(int orderId) throws SQLException {
         String sql = "SELECT o.product_id, name, price, o.quantity, image FROM OrderItems o INNER JOIN Products p ON o.product_id=p.product_id WHERE order_id = ?";
 
@@ -97,7 +102,8 @@ public class OrderItems {
         }
     }
 
-    // get all rows of table
+    // used for debugging
+    // get all rows of the table
     public List<OrderItem> getAllOrderItems() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM OrderItems");
@@ -115,6 +121,7 @@ public class OrderItems {
         }
     }
 
+    // used for debugging
     // get the string of all order id and its products + quantity
     public String getOrderNItemsQuantities() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection()) {

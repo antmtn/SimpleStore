@@ -9,6 +9,7 @@ import java.util.List;
 
 public class Orders {
 
+    // creates the orders table if needed
     public void createTable() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection();
              Statement stmt = conn.createStatement()) {
@@ -24,6 +25,7 @@ public class Orders {
         }
     }
 
+    // deletes the orders table if needed
     public void deleteTable() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection();
              Statement stmt = conn.createStatement()) {
@@ -31,6 +33,8 @@ public class Orders {
         }
     }
 
+    // Inserts a new order into the table for the given userId
+    // Returns the order Id
     public int insert(int userId) throws SQLException {
         String sql = "INSERT INTO Orders (user_id) VALUES (?)";
 
@@ -50,7 +54,7 @@ public class Orders {
         }
     }
 
-    // get all order of a user
+    // get all orders of a user matching the userId
     public List<Order> getOrders(int userId) throws SQLException {
         String sql = "SELECT * FROM Orders WHERE user_id = ?";
 
@@ -71,6 +75,7 @@ public class Orders {
         }
     }
 
+    // Used for debugging
     // get all rows of table
     public List<Order> getAllOrders() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection()) {
@@ -88,6 +93,8 @@ public class Orders {
         }
     }
 
+    // Used for debugging
+    // Get all of the user ids and their order ids to display in a String
     public String getUserOrder() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection()) {
             Statement stmt = conn.createStatement();
