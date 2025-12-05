@@ -9,6 +9,7 @@ import java.util.List;
 
 public class Products {
 
+    // creates the Products table if needed
     public void createTable() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection();
              Statement stmt = conn.createStatement()) {
@@ -25,6 +26,7 @@ public class Products {
         }
     }
 
+    // deletes the Products table if needed
     public void deleteTable() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection();
              Statement stmt = conn.createStatement()) {
@@ -32,6 +34,8 @@ public class Products {
         }
     }
 
+    // Inserts a new product into the table
+    // Used for database intialization (currently)
     public int insert(String name, double price, int qty, String image) throws SQLException {
         String sql = "INSERT INTO Products (name, price, quantity, image) VALUES (?,?,?,?)";
         try (Connection conn = MySQLConnection.getConnection();
@@ -52,6 +56,8 @@ public class Products {
         }
     }
 
+    // Used for debugging
+    // Gets the product ids and name from all the products
     public String getNames() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection()) {
             Statement stmt = conn.createStatement();
@@ -67,7 +73,9 @@ public class Products {
             return sb.toString();
         }
     }
-
+    
+    // Gets all the products with all their fields
+    // Used to display on the products page
     public List<Product> getAll() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Products");

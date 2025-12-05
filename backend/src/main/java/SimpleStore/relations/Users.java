@@ -5,6 +5,8 @@ import java.sql.*;
 import java.sql.SQLException;
 
 public class Users {
+
+    // Creates the Users table if needed
     public void createTable() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection();
              Statement stmt = conn.createStatement()) {
@@ -21,6 +23,7 @@ public class Users {
         }
     }
 
+    // Deletes the Users table if needed
     public void deleteTable() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection();
              Statement stmt = conn.createStatement()) {
@@ -28,6 +31,8 @@ public class Users {
         }
     }
 
+    // Inserts a new tuple with given username and password into the Users table
+    // Used when users sign up 
     public int insert(String username, String password) throws SQLException {
         String sql = "INSERT INTO users (username, password) VALUES (?,?)";
         try (Connection conn = MySQLConnection.getConnection();
@@ -47,6 +52,8 @@ public class Users {
         }
     }
 
+    // Used when users login
+    // Checks if there is a user that uses that username and password
     public int checkLogin(String username, String password) throws SQLException {
         String sql = "SELECT user_id FROM users WHERE username = ? AND password = ?";
         try (Connection conn = MySQLConnection.getConnection()) {
@@ -62,6 +69,8 @@ public class Users {
         }
     }
 
+    // Inserts a new user into the table if the username doesn't already exist
+    // Used for sign up 
     public int checkSignup(String username, String password) throws SQLException {
         String sql = "SELECT user_id FROM users WHERE username = ?";
         try (Connection conn = MySQLConnection.getConnection()) {
@@ -76,6 +85,8 @@ public class Users {
         }
     }
 
+    // Used for debugging
+    // Gets all of the usernames 
     public String getUsernames() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection()) {
             Statement stmt = conn.createStatement();
