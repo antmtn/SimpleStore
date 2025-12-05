@@ -5,6 +5,7 @@ import java.sql.*;
 import java.sql.SQLException;
 
 public class Carts {
+    // Creates the table Carts
     public void createTable() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection();
              Statement stmt = conn.createStatement()) {
@@ -19,6 +20,7 @@ public class Carts {
         }
     }
 
+    // Drops the Carts Table if it exists
     public void deleteTable() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection();
              Statement stmt = conn.createStatement()) {
@@ -26,6 +28,8 @@ public class Carts {
         }
     }
 
+    // Inserts a new cart corresponding to the userId in the Carts table. 
+    // The CartId is autoincremented so it isn't included in the SQL Statement. 
     public int insert(int userId) throws SQLException {
         String sql = "INSERT INTO Carts (user_id) VALUES (?)";
         try (Connection conn = MySQLConnection.getConnection();
@@ -35,6 +39,8 @@ public class Carts {
         }
     }
 
+    // Queries for the cart_id based on the user_id
+    // If the cart is not found a new cart is created for the user and its Id is returned
     public int findCartId(int user_id) throws SQLException {
         String findIdSQL = "SELECT cart_id FROM Carts WHERE user_id = ?";
         try (Connection conn = MySQLConnection.getConnection()) {
@@ -58,6 +64,8 @@ public class Carts {
         }
     }
 
+    // Used for debugging
+    // Those code returns a string of all the carts with their cart_id and user_id
     public String getUserCart() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection()) {
             Statement stmt = conn.createStatement();

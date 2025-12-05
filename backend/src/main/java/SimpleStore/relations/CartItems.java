@@ -12,6 +12,7 @@ public class CartItems {
 
     private final Carts carts = new Carts();
 
+    // creates the CartItems table 
     public void createTable() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection();
              Statement stmt = conn.createStatement()) {
@@ -30,6 +31,7 @@ public class CartItems {
         }
     }
 
+    // deletes the CartItems table if needed (like when adjusting schema)
     public void deleteTable() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection();
              Statement stmt = conn.createStatement()) {
@@ -37,6 +39,8 @@ public class CartItems {
         }
     }
 
+    // inserts a new cart item into CartItems with the given user_id, product_id, and quantity
+    // This is triggered whenever a user adds an item to their cart
     public void insert(int user_id, int product_id, int quantity) throws SQLException {
         String sql = "INSERT INTO CartItems (cart_id, product_id, quantity) VALUES (?, ?, ?)";
         int cart_id = carts.findCartId(user_id);
@@ -49,6 +53,8 @@ public class CartItems {
         }
     }
 
+    // This queries for all the CartItems corresponding to a cart_id
+    // It returns them as a List of Product objects
     public List<Product> getCartItems(int cart_id) throws SQLException {
         String sql = "SELECT c.product_id, name, price, c.quantity, image FROM CartItems c INNER JOIN Products p ON c.product_id=p.product_id WHERE cart_id = ?";
         try (Connection conn = MySQLConnection.getConnection()) {
@@ -70,6 +76,8 @@ public class CartItems {
         }
     }
 
+    // This updates the quantity of the cart item corresponding to the inputted user_id and productId
+    // The old value is replaced with newQuantity
     public int updateItemQuantity(int user_id, int productId, int newQuantity) throws SQLException {
         //System.out.println("Update Request Received " + user_id + " " + productId + " " + newQuantity);
         String sql = "UPDATE CartItems SET quantity = ? WHERE cart_id = ? AND product_id = ?";
@@ -85,6 +93,8 @@ public class CartItems {
         }
     }
 
+    // This deletes a product from the cart
+    // This is triggered when a user clicks the remove from cart button in their cart
     public int deleteProduct(int user_id, int productId) throws SQLException {
         String sql = "DELETE FROM CartItems WHERE cart_id = ? AND product_id = ?";
         int cartId = carts.findCartId(user_id);
@@ -99,6 +109,8 @@ public class CartItems {
         }
     }
 
+    // Used for debugging
+    // This returns all of the cartItems into a String 
     // get the string of all cart id and its products + quantity
     public String getCartNItemsQuantities() throws SQLException {
         try (Connection conn = MySQLConnection.getConnection()) {
